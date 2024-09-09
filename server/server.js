@@ -25,17 +25,31 @@ db.connect(err => {
 
 // Sample POST route to add user
 app.post('/api/signup', (req, res) => {
-    const { fname, lname, mob, adhar, courseid, schoolname, schoolboard, schoolpass, institutename, institutecourse, institutepass } = req.body;
-    if (!fname || !lname || !mob || !adhar || !courseid || !schoolname || !schoolboard || !schoolpass || !institutename || !institutecourse || !institutepass) {
+    const { name, password, mob, adhar, courseid, schoolname, schoolboard, schoolpass, institutename, institutecourse, institutepass } = req.body;
+    if (!name || !password || !mob || !adhar || !courseid || !schoolname || !schoolboard || !schoolpass || !institutename || !institutecourse || !institutepass) {
         return res.status(400).json({ error: 'All fields are required' });
     }
-    const query = 'INSERT INTO registration (first_name, last_name, mobile_no, aadhar_no, course_id, high_school_name, high_school_board, high_school_passout, graduation_institute, graduation_course, graduation_passout ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
-    db.query(query, [fname, lname, mob, adhar, courseid, schoolname, schoolboard, schoolpass, institutename, institutecourse, institutepass], (err, result) => {
+    const query = 'INSERT INTO registration (name, password, mobile_no, aadhar_no, course_id, high_school_name, high_school_board, high_school_passout, graduation_institute, graduation_course, graduation_passout ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
+    db.query(query, [name, password, mob, adhar, courseid, schoolname, schoolboard, schoolpass, institutename, institutecourse, institutepass], (err, result) => {
         if (err) {
             console.error('Error inserting data:', err);
             return res.status(500).json({ error: 'Database error' });
         }
         res.status(200).json({ message: 'User signed up successfully' });
+    });
+});
+app.post('/login', (req, res) => {
+    const { name, password } = req.body;
+    const sqlSelect = 'SELECT * FROM registration WHERE name = ? AND password = ?';
+    db.query(sqlSelect, [name, password], (err, result) => {
+        if (err) {
+            console.log(err);
+            res.status(500).send('Server error');
+        } else if (result.length > 0) {
+            res.status(200).send('Login successful');
+        } else {
+            res.status(401).send('Invalid credentials');
+        }
     });
 });
 
