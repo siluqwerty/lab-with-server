@@ -26,9 +26,9 @@ db.connect(err => {
 //creating table
 app.get('/create-table', (req, res) => {
     const sql = `
-    CREATE TABLE registration (
-      registration_id INT AUTO_INCREMENT PRIMARY KEY,
-      first_name VARCHAR(255), last_name VARCHAR(255), mobile_no INT, aadhar_no INT, course_id VARCHAR(255), high_school_name VARCHAR(255), high_school_board VARCHAR(255), high_school_passout DATE, graduation_institute VARCHAR(255), graduation_course VARCHAR(255), graduation_passout DATE)`;
+    CREATE TABLE booked_pc (
+      s_no INT AUTO_INCREMENT PRIMARY KEY,
+      pc_name VARCHAR(255), user_name VARCHAR(255), uptec_id VARCHAR(255) , time VARCHAR(255), date DATE)`;
     db.query(sql, (err, result) => {
         if (err) {
             console.error('Error creating table:', err);
@@ -36,7 +36,7 @@ app.get('/create-table', (req, res) => {
             return;
         }
         console.log('Table created:', result);
-        res.send('Users table created');
+        res.send(' table created');
     });
 });
 

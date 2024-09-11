@@ -26,9 +26,7 @@ db.connect(err => {
 // Sample POST route to add user
 app.post('/api/signup', (req, res) => {
     const { name, password, mob, adhar, courseid, schoolname, schoolboard, schoolpass, institutename, institutecourse, institutepass } = req.body;
-    if (!name || !password || !mob || !adhar || !courseid || !schoolname || !schoolboard || !schoolpass || !institutename || !institutecourse || !institutepass) {
-        return res.status(400).json({ error: 'All fields are required' });
-    }
+
     const query = 'INSERT INTO registration (name, password, mobile_no, aadhar_no, course_id, high_school_name, high_school_board, high_school_passout, graduation_institute, graduation_course, graduation_passout ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)';
     db.query(query, [name, password, mob, adhar, courseid, schoolname, schoolboard, schoolpass, institutename, institutecourse, institutepass], (err, result) => {
         if (err) {
@@ -50,6 +48,30 @@ app.post('/login', (req, res) => {
         } else {
             res.status(401).send('Invalid credentials');
         }
+    });
+});
+app.post('/bookedpc', (req, res) => {
+    const { pcname, name, uptecid, time, date } = req.body;
+
+    const query = 'INSERT INTO booked_pc (pc_name, user_name, uptec_id, time, date ) VALUES (?, ?, ?, ?, ?)';
+    db.query(query, [pcname, name, uptecid, time, date], (err, result) => {
+        if (err) {
+            console.error('Error inserting data:', err);
+            return res.status(500).json({ error: 'Database error' });
+        }
+        res.status(200).json({ message: 'pc booked up successfully' });
+    });
+});
+app.post('/report', (req, res) => {
+    const { problem, details } = req.body;
+
+    const query = 'INSERT INTO maintenance (problem_type, details  ) VALUES (?, ?)';
+    db.query(query, [problem, details], (err, result) => {
+        if (err) {
+            console.error('Error inserting data:', err);
+            return res.status(500).json({ error: 'Database error' });
+        }
+        res.status(200).json({ message: 'report send successfully' });
     });
 });
 
