@@ -53,7 +53,7 @@ app.post('/login', (req, res) => {
 app.post('/bookedpc', (req, res) => {
     const { pcname, name, uptecid, time, date } = req.body;
 
-    const query = 'INSERT INTO booked_pc (pc_name, user_name, uptec_id, time, date ) VALUES (?, ?, ?, ?, ?)';
+    const query = 'INSERT INTO booked_pc (pc_name, name, uptec_id, time, date ) VALUES (?, ?, ?, ?, ?)';
     db.query(query, [pcname, name, uptecid, time, date], (err, result) => {
         if (err) {
             console.error('Error inserting data:', err);
@@ -74,6 +74,30 @@ app.post('/report', (req, res) => {
         res.status(200).json({ message: 'report send successfully' });
     });
 });
+app.get('/studentdata', (req, res) => {
+    const sql = 'SELECT * FROM registration';
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        res.json(result); // Sending the data back to the client
+    });
+});
+app.get('/showpc', (req, res) => {
+    const sql = 'SELECT * FROM booked_pc';
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        res.json(result); // Sending the data back to the client
+    });
+});
+app.get('/showmaintenance', (req, res) => {
+    const sql = 'SELECT * FROM maintenance';
+    db.query(sql, (err, result) => {
+        if (err) throw err;
+        res.json(result); // Sending the data back to the client
+    });
+});
+
+
+
 
 // Start the server
 const PORT = 5000;
