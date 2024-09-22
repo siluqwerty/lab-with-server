@@ -65,7 +65,7 @@ app.post('/bookedpc', (req, res) => {
 app.post('/report', (req, res) => {
     const { problem, details } = req.body;
 
-    const query = 'INSERT INTO maintenance (problem_type, details  ) VALUES (?, ?)';
+    const query = 'INSERT INTO maintenance ( problem_type, details) VALUES (?, ?)';
     db.query(query, [problem, details], (err, result) => {
         if (err) {
             console.error('Error inserting data:', err);
